@@ -25,7 +25,6 @@ else:
     ctypes = None
     winreg = None
 
-Python
 # ==========================================
 #  SINGLE INSTANCE CONTROLE & SYSTEEMTAAL
 # ==========================================
