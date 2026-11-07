@@ -1,43 +1,46 @@
-# CoreTrakt 🎬
+# CoreTrakt
 
-> A modern, zero-configuration VLC media scrobbler for Trakt.tv with native Windows 11 UI and smart title resolution.
-
-CoreTrakt lives quietly in your Windows system tray, communicates with VLC Media Player over its local HTTP interface, extracts clean titles via `guessit`, matches metadata with the official Trakt Search API, and scrobbles your playback progress automatically.
+CoreTrakt is a Windows system tray utility that scrobbles media played in VLC Media Player to Trakt.tv. It queries VLC's local web interface, extracts media titles and episode numbers from filenames, resolves metadata against Trakt's API, and updates playback progress in real time.
 
 ---
 
-## ✨ Features
+## Features
 
-- **Smart Metadata & Fuzzy Matching**: Uses Trakt's search engine to resolve exact show IDs and titles, automatically handling missing apostrophes, alternate names, and foreign media releases.
-- **Zero-Setup VLC Configuration**: Automatically configures VLC's `vlcrc` file on first launch (enables HTTP web interface and configures credentials).
-- **One-Click Trakt OAuth**: Employs the official Trakt Device Code flow — no need to create developer keys or enter client secrets.
-- **Modern Windows 11 Interface**: Clean, responsive dark-mode GUI built with `CustomTkinter`.
-- **11 Interface Languages**: Real-time interface translation across English, Dutch, Spanish, French, German, Portuguese, Russian, Chinese, Japanese, Hindi, and Arabic.
-- **Quick Launch Shortcuts**: Quick buttons inside the settings panel to launch VLC directly or view your Trakt dashboard.
-- **Directory Filtering**: Limit scrobbling to selected storage folders, or monitor all media played in VLC.
-- **Lightweight System Tray Resident**: Minimal RAM and CPU consumption.
-
----
-
-## 🚀 Download & Installation (Standalone Executable)
-
-You do **not** need Python installed on your computer to run CoreTrakt.
-
-1. Download the latest **`CoreTrakt.exe`** from the [Releases](https://github.com/gitovino/CoreTrakt/releases) section.
-2. Place `CoreTrakt.exe` in a directory of your choice.
-3. Launch the app and click **Connect with Trakt**.
-4. Enter the 8-character verification code displayed in your browser.
-5. Play media in VLC — CoreTrakt will take care of the rest.
+- **Automated VLC Configuration:** Automatically configures VLC's web interface and credentials in `vlcrc` on launch.
+- **Title and Metadata Resolution:** Uses `guessit` alongside Trakt's search API to resolve show titles, movie releases, missing punctuation, and alternate language titles.
+- **Trakt Device Code Authentication:** Connects to Trakt via the official OAuth device authentication flow without requiring custom developer credentials.
+- **Directory Filtering:** Optionally restrict scrobbling to specific folders, or track all playback across the system.
+- **System Tray Operation:** Runs in the Windows system tray with minimal memory and CPU usage.
+- **Single-Instance Enforcement:** Uses a Windows mutex to prevent duplicate running instances, localized to the active system language.
+- **Windows Startup Integration:** Built-in option to launch automatically with Windows.
+- **Multi-Language UI:** Settings interface localized in English, Dutch, Spanish, French, German, Portuguese, Russian, Chinese, Japanese, Hindi, and Arabic.
 
 ---
 
-## 🛠️ Building from Source
+## Installation
 
-### Prerequisites
+Precompiled standalone binaries for Windows 10 and 11 are available on the releases page. Python is not required to run the standalone executable.
+
+1. Download `CoreTrakt.exe` from the [Releases](https://github.com/gitovino/CoreTrakt/releases) section.
+2. Place the executable in a preferred directory.
+3. Launch `CoreTrakt.exe`.
+4. Click **Connect with Trakt** and complete the authorization prompt in your browser.
+5. Start VLC. Media will scrobble automatically during playback.
+
+---
+
+## Running from Source
+
+### Requirements
+
+- Windows 10 or 11
 - Python 3.9+
-- VLC Media Player installed
+- VLC Media Player
 
-### Setup & Run
+### Installation
+
+Clone the repository and install the required dependencies:
+
 ```bash
 git clone [https://github.com/gitovino/CoreTrakt.git](https://github.com/gitovino/CoreTrakt.git)
 cd CoreTrakt
