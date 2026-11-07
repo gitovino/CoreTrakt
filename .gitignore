@@ -1,0 +1,21 @@
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+ENV/
+
+# PyInstaller build artifacts
+build/
+dist/
+*.spec
+
+# User credentials & local machine data
+trakt_token.json
+config.json
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
