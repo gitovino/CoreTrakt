@@ -1,8 +1,8 @@
-# ConeTrakt 🎬
+# CoreTrakt 🎬
 
 > A modern, zero-configuration VLC media scrobbler for Trakt.tv with native Windows 11 UI and smart title resolution.
 
-ConeTrakt lives quietly in your Windows system tray, communicates with VLC Media Player over its local HTTP interface, extracts clean titles via `guessit`, matches metadata with the official Trakt Search API, and scrobbles your playback progress automatically.
+CoreTrakt lives quietly in your Windows system tray, communicates with VLC Media Player over its local HTTP interface, extracts clean titles via `guessit`, matches metadata with the official Trakt Search API, and scrobbles your playback progress automatically.
 
 ---
 
@@ -21,13 +21,13 @@ ConeTrakt lives quietly in your Windows system tray, communicates with VLC Media
 
 ## 🚀 Download & Installation (Standalone Executable)
 
-You do **not** need Python installed on your computer to run ConeTrakt.
+You do **not** need Python installed on your computer to run CoreTrakt.
 
-1. Download the latest **`VLC_Trakt_Scrobbler.exe`** from the [Releases](https://github.com/YOUR_GITHUB_USERNAME/ConeTrakt/releases) section.
-2. Place `VLC_Trakt_Scrobbler.exe` in a directory of your choice.
+1. Download the latest **`CoreTrakt.exe`** from the [Releases](https://github.com/gitovino/CoreTrakt/releases) section.
+2. Place `CoreTrakt.exe` in a directory of your choice.
 3. Launch the app and click **Connect with Trakt**.
 4. Enter the 8-character verification code displayed in your browser.
-5. Play media in VLC — ConeTrakt will take care of the rest.
+5. Play media in VLC — CoreTrakt will take care of the rest.
 
 ---
 
@@ -39,8 +39,8 @@ You do **not** need Python installed on your computer to run ConeTrakt.
 
 ### Setup & Run
 ```bash
-git clone [https://github.com/YOUR_GITHUB_USERNAME/ConeTrakt.git](https://github.com/YOUR_GITHUB_USERNAME/ConeTrakt.git)
-cd ConeTrakt
+git clone [https://github.com/gitovino/CoreTrakt.git](https://github.com/gitovino/CoreTrakt.git)
+cd CoreTrakt
 
 python -m pip install -r requirements.txt
-python vlc_trakt_tray.py"# CoreTrakt" 
+python vlc_trakt_tray.py
