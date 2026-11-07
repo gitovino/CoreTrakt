@@ -43,7 +43,7 @@ POLL_INTERVAL_SECONDS = 5
 
 TRANSLATIONS = {
     "Nederlands": {
-        "settings_title": "ConeTrakt - Instellingen",
+        "settings_title": "CoreTrakt - Instellingen",
         "tab_account": "Account & VLC",
         "tab_folders": "Gemonitorde Mappen",
         "tab_prefs": "Voorkeuren",
@@ -74,7 +74,7 @@ TRANSLATIONS = {
         "language": "Interfacetaal:"
     },
     "English": {
-        "settings_title": "ConeTrakt - Settings",
+        "settings_title": "CoreTrakt - Settings",
         "tab_account": "Account & VLC",
         "tab_folders": "Monitored Folders",
         "tab_prefs": "Preferences",
@@ -105,7 +105,7 @@ TRANSLATIONS = {
         "language": "Interface Language:"
     },
     "Español": {
-        "settings_title": "ConeTrakt - Configuración",
+        "settings_title": "CoreTrakt - Configuración",
         "tab_account": "Cuenta y VLC",
         "tab_folders": "Carpetas Monitorizadas",
         "tab_prefs": "Preferencias",
@@ -136,7 +136,7 @@ TRANSLATIONS = {
         "language": "Idioma de interfaz:"
     },
     "Français": {
-        "settings_title": "ConeTrakt - Paramètres",
+        "settings_title": "CoreTrakt - Paramètres",
         "tab_account": "Compte & VLC",
         "tab_folders": "Dossiers Surveillés",
         "tab_prefs": "Préférences",
@@ -167,7 +167,7 @@ TRANSLATIONS = {
         "language": "Langue de l'interface :"
     },
     "Deutsch": {
-        "settings_title": "ConeTrakt - Einstellungen",
+        "settings_title": "CoreTrakt - Einstellungen",
         "tab_account": "Konto & VLC",
         "tab_folders": "Überwachte Ordner",
         "tab_prefs": "Einstellungen",
@@ -198,7 +198,7 @@ TRANSLATIONS = {
         "language": "Oberflächensprache:"
     },
     "Português": {
-        "settings_title": "ConeTrakt - Configurações",
+        "settings_title": "CoreTrakt - Configurações",
         "tab_account": "Conta & VLC",
         "tab_folders": "Pastas Monitoradas",
         "tab_prefs": "Preferências",
@@ -229,7 +229,7 @@ TRANSLATIONS = {
         "language": "Idioma da interface:"
     },
     "Русский": {
-        "settings_title": "ConeTrakt - Настройки",
+        "settings_title": "CoreTrakt - Настройки",
         "tab_account": "Аккаунт и VLC",
         "tab_folders": "Отслеживаемые папки",
         "tab_prefs": "Настройки",
@@ -260,7 +260,7 @@ TRANSLATIONS = {
         "language": "Язык интерфейса:"
     },
     "中文": {
-        "settings_title": "ConeTrakt - 设置",
+        "settings_title": "CoreTrakt - 设置",
         "tab_account": "账户与 VLC",
         "tab_folders": "监控文件夹",
         "tab_prefs": "偏好设置",
@@ -291,7 +291,7 @@ TRANSLATIONS = {
         "language": "界面语言："
     },
     "日本語": {
-        "settings_title": "ConeTrakt - 設定",
+        "settings_title": "CoreTrakt - 設定",
         "tab_account": "アカウント & VLC",
         "tab_folders": "監視フォルダー",
         "tab_prefs": "設定",
@@ -322,7 +322,7 @@ TRANSLATIONS = {
         "language": "インターフェース言語："
     },
     "हिन्दी": {
-        "settings_title": "ConeTrakt - सेटिंग्स",
+        "settings_title": "CoreTrakt - सेटिंग्स",
         "tab_account": "खाता और VLC",
         "tab_folders": "निगरानी वाले फ़ोल्डर",
         "tab_prefs": "प्राथमिकताएं",
@@ -353,7 +353,7 @@ TRANSLATIONS = {
         "language": "इंटरफ़ेस भाषा:"
     },
     "العربية": {
-        "settings_title": "ConeTrakt - الإعدادات",
+        "settings_title": "CoreTrakt - الإعدادات",
         "tab_account": "الحساب و VLC",
         "tab_folders": "المجلدات المراقبة",
         "tab_prefs": "التفضيلات",
@@ -393,7 +393,7 @@ def get_resource_path(relative_path: str) -> Path:
 
 
 class VLCConfigManager:
-    DEFAULT_PASS = "conetrakt"
+    DEFAULT_PASS = "CoreTrakt"
 
     @staticmethod
     def get_vlcrc_path() -> Path:
@@ -414,7 +414,7 @@ class VLCConfigManager:
         if not vlcrc.exists():
             try:
                 with open(vlcrc, "w", encoding="utf-8") as f:
-                    f.write("[main]\nextraintf=http\n\n[lua]\nhttp-password=conetrakt\n")
+                    f.write("[main]\nextraintf=http\n\n[lua]\nhttp-password=CoreTrakt\n")
                 return cls.DEFAULT_PASS, True
             except Exception:
                 return cls.DEFAULT_PASS, False
@@ -488,7 +488,7 @@ class VLCConfigManager:
 class ConfigManager:
     DEFAULT_CONFIG = {
         "vlc_host": "http://localhost:8080",
-        "vlc_password": "conetrakt",
+        "vlc_password": "CoreTrakt",
         "folders": [],
         "run_on_startup": False,
         "show_notifications": True,
@@ -518,7 +518,7 @@ class ConfigManager:
             with open(self.file_path, "w", encoding="utf-8") as f:
                 json.dump(self.data, f, indent=2)
         except Exception as e:
-            print(f"[ConeTrakt] Error saving config: {e}")
+            print(f"[CoreTrakt] Error saving config: {e}")
 
     def save(self):
         with self.lock:
@@ -538,7 +538,7 @@ def set_windows_startup(enable: bool):
     if not winreg:
         return
     key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
-    app_name = "ConeTrakt"
+    app_name = "CoreTrakt" 
     try:
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_SET_VALUE)
         if enable:
@@ -551,7 +551,7 @@ def set_windows_startup(enable: bool):
                 pass
         winreg.CloseKey(key)
     except Exception as e:
-        print(f"[ConeTrakt] Startup Registry Error: {e}")
+        print(f"[CoreTrakt] Startup Registry Error: {e}")
 
 
 def create_fallback_icon(size: int = 64) -> Image.Image:
@@ -674,11 +674,11 @@ class TraktClient:
                         "year": item.get("year", year),
                         "ids": item.get("ids", {}),
                     }
-                    print(f"[ConeTrakt] Matched '{title}' -> '{resolved['title']}' (Trakt ID: {resolved['ids'].get('trakt')})")
+                    print(f"[CoreTrakt] Matched '{title}' -> '{resolved['title']}' (Trakt ID: {resolved['ids'].get('trakt')})")
                     self._search_cache[cache_key] = resolved
                     return resolved
         except Exception as e:
-            print(f"[ConeTrakt] Search error for '{title}': {e}")
+            print(f"[CoreTrakt] Search error for '{title}': {e}")
 
         fallback = {"title": title, "year": year, "ids": {}}
         self._search_cache[cache_key] = fallback
@@ -686,7 +686,7 @@ class TraktClient:
 
     def scrobble(self, action: str, media_info: dict, progress: float):
         if not self.is_authenticated():
-            print(f"[ConeTrakt] Scrobble '{action}' skipped: Not authenticated.")
+            print(f"[CoreTrakt] Scrobble '{action}' skipped: Not authenticated.")
             return False
 
         # Los de officiële ID's en exacte spelling op
@@ -722,12 +722,12 @@ class TraktClient:
                 payload["movie"]["year"] = int(resolved["year"])
 
         try:
-            print(f"[ConeTrakt] Scrobble '{action}' request: {payload}")
+            print(f"[CoreTrakt] Scrobble '{action}' request: {payload}")
             res = requests.post(endpoint, json=payload, headers=self._headers(), timeout=8)
-            print(f"[ConeTrakt] Trakt response ({res.status_code}): {res.text.strip()}")
+            print(f"[CoreTrakt] Trakt response ({res.status_code}): {res.text.strip()}")
             return res.status_code in [200, 201]
         except Exception as e:
-            print(f"[ConeTrakt] Scrobble network error: {e}")
+            print(f"[CoreTrakt] Scrobble network error: {e}")
             return False
 
 
@@ -752,7 +752,7 @@ class SettingsGUI:
             self.lang = "Nederlands"
         self.t = TRANSLATIONS[self.lang]
 
-        print("[ConeTrakt] Opening Modern Settings GUI...")
+        print("[CoreTrakt] Opening Modern Settings GUI...")
         self.root = ctk.CTk()
         self.root.title(self.t["settings_title"])
         self.root.geometry("680x520")
@@ -767,7 +767,7 @@ class SettingsGUI:
         self.var_notify = tk.BooleanVar(value=self.config.get("show_notifications", True))
 
         self._build_ui()
-        print("[ConeTrakt] Settings GUI is ready.")
+        print("[CoreTrakt] Settings GUI is ready.")
         self.root.protocol("WM_DELETE_WINDOW", self._on_close)
         self.root.mainloop()
 
@@ -1151,7 +1151,7 @@ class VLCScrobblerEngine:
         self.stop_signal = threading.Event()
 
     def _get_vlc_auth_headers(self):
-        p = self.config.get("vlc_password", "conetrakt")
+        p = self.config.get("vlc_password", "CoreTrakt")
         b64 = base64.b64encode(f":{p}".encode()).decode()
         return {"Authorization": f"Basic {b64}"}
 
@@ -1351,7 +1351,7 @@ class VLCScrobblerEngine:
             try:
                 self._poll_cycle()
             except Exception as e:
-                print(f"[ConeTrakt] Error in engine cycle: {e}")
+                print(f"[CoreTrakt] Error in engine cycle: {e}")
             self.stop_signal.wait(POLL_INTERVAL_SECONDS)
 
         if self.current_media:
@@ -1365,10 +1365,10 @@ class TraktTrayApp:
     def __init__(self):
         self.config = ConfigManager(CONFIG_FILE)
 
-        print("[ConeTrakt] Verifying VLC web interface setup...")
+        print("[CoreTrakt] Verifying VLC web interface setup...")
         pwd, ok = VLCConfigManager.get_or_setup_vlc()
         self.config.set("vlc_password", pwd)
-        print(f"[ConeTrakt] VLC Configuration status: {'OK' if ok else 'Requires attention'}")
+        print(f"[CoreTrakt] VLC Configuration status: {'OK' if ok else 'Requires attention'}")
 
         self.trakt = TraktClient(self.config, TOKEN_FILE)
         self.status_text = "Starting..."
@@ -1379,7 +1379,7 @@ class TraktTrayApp:
     def update_status(self, text: str):
         self.status_text = text
         if self.icon:
-            self.icon.title = f"ConeTrakt: {text}"
+            self.icon.title = f"CoreTrakt: {text}"
             self.icon.update_menu()
 
     def notify(self, title: str, message: str):
@@ -1402,9 +1402,9 @@ class TraktTrayApp:
         icon.stop()
 
     def run(self):
-        print("[ConeTrakt] Starting application engine...")
+        print("[CoreTrakt] Starting application engine...")
         if not self.trakt.is_authenticated():
-            print("[ConeTrakt] Trakt is not authenticated yet. Launching setup window...")
+            print("[CoreTrakt] Trakt is not authenticated yet. Launching setup window...")
             SettingsGUI(self.config, self.trakt)
 
         self.trakt.refresh_token_if_needed()
@@ -1422,9 +1422,9 @@ class TraktTrayApp:
         )
 
         self.icon = pystray.Icon(
-            name="ConeTrakt",
+            name="CoreTrakt",
             icon=get_application_icon(self.config.get("custom_icon_path", "")),
-            title="ConeTrakt: Idle",
+            title="CoreTrakt: Idle",
             menu=menu,
         )
         self.icon.run()
