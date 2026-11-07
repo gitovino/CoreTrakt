@@ -19,9 +19,34 @@ from pystray import MenuItem as item
 import requests
 
 if sys.platform == "win32":
+    import ctypes
     import winreg
 else:
+    ctypes = None
     winreg = None
+
+# ==========================================
+#  SINGLE INSTANCE CONTROLE (MUTEX)
+# ==========================================
+def ensure_single_instance():
+    """Zorgt ervoor dat CoreTrakt nooit dubbel geopend kan worden."""
+    if not ctypes:
+        return None
+    try:
+        mutex_name = "CoreTrakt_SingleInstance_Mutex"
+        mutex = ctypes.windll.kernel32.CreateMutexW(None, False, mutex_name)
+        error_already_exists = 183
+        if ctypes.windll.kernel32.GetLastError() == error_already_exists:
+            ctypes.windll.user32.MessageBoxW(
+                0,
+                "CoreTrakt draait al actief op de achtergrond in het systeemvak (rechtsonder bij de klok).",
+                "CoreTrakt",
+                0x40 | 0x10000
+            )
+            sys.exit(0)
+        return mutex
+    except Exception:
+        return None
 
 # ==========================================
 #  TRAKT CONFIGURATIE & THEMA
@@ -71,7 +96,8 @@ TRANSLATIONS = {
         "tray_desc": "Kies een aangepaste afbeelding (.ico, .png) of behoud het standaardicoon:",
         "browse": "Bladeren...",
         "reset": "Herstellen",
-        "language": "Interfacetaal:"
+        "language": "Interfacetaal:",
+        "running_in_tray": "CoreTrakt blijft actief op de achtergrond in het systeemvak."
     },
     "English": {
         "settings_title": "CoreTrakt - Settings",
@@ -102,7 +128,8 @@ TRANSLATIONS = {
         "tray_desc": "Choose an image file (.ico, .png) or keep the embedded app icon:",
         "browse": "Browse...",
         "reset": "Reset to Default",
-        "language": "Interface Language:"
+        "language": "Interface Language:",
+        "running_in_tray": "CoreTrakt remains active in the system tray."
     },
     "Español": {
         "settings_title": "CoreTrakt - Configuración",
@@ -133,7 +160,8 @@ TRANSLATIONS = {
         "tray_desc": "Elige una imagen personalizada (.ico, .png) o mantén el icono predeterminado:",
         "browse": "Examinar...",
         "reset": "Restablecer",
-        "language": "Idioma de interfaz:"
+        "language": "Idioma de interfaz:",
+        "running_in_tray": "CoreTrakt sigue activo en la bandeja del sistema."
     },
     "Français": {
         "settings_title": "CoreTrakt - Paramètres",
@@ -164,7 +192,8 @@ TRANSLATIONS = {
         "tray_desc": "Choisissez une image (.ico, .png) ou conservez l'icône par défaut :",
         "browse": "Parcourir...",
         "reset": "Réinitialiser",
-        "language": "Langue de l'interface :"
+        "language": "Langue de l'interface :",
+        "running_in_tray": "CoreTrakt reste actif dans la barre d'état système."
     },
     "Deutsch": {
         "settings_title": "CoreTrakt - Einstellungen",
@@ -195,7 +224,8 @@ TRANSLATIONS = {
         "tray_desc": "Wählen Sie ein Bild (.ico, .png) oder behalten Sie das Standard-Symbol:",
         "browse": "Durchsuchen...",
         "reset": "Zurücksetzen",
-        "language": "Oberflächensprache:"
+        "language": "Oberflächensprache:",
+        "running_in_tray": "CoreTrakt bleibt im Infobereich aktiv."
     },
     "Português": {
         "settings_title": "CoreTrakt - Configurações",
@@ -226,7 +256,8 @@ TRANSLATIONS = {
         "tray_desc": "Escolha uma imagem (.ico, .png) ou mantenha o ícone padrão:",
         "browse": "Procurar...",
         "reset": "Redefinir",
-        "language": "Idioma da interface:"
+        "language": "Idioma da interface:",
+        "running_in_tray": "CoreTrakt permanece ativo na bandeja do sistema."
     },
     "Русский": {
         "settings_title": "CoreTrakt - Настройки",
@@ -257,7 +288,8 @@ TRANSLATIONS = {
         "tray_desc": "Выберите изображение (.ico, .png) или оставьте стандартный значок:",
         "browse": "Обзор...",
         "reset": "Сбросить",
-        "language": "Язык интерфейса:"
+        "language": "Язык интерфейса:",
+        "running_in_tray": "CoreTrakt продолжает работать в системном трее."
     },
     "中文": {
         "settings_title": "CoreTrakt - 设置",
@@ -288,7 +320,8 @@ TRANSLATIONS = {
         "tray_desc": "选择图像文件 (.ico, .png) 或保留默认图标：",
         "browse": "浏览...",
         "reset": "重置",
-        "language": "界面语言："
+        "language": "界面语言：",
+        "running_in_tray": "CoreTrakt 继续在系统托盘后台运行。"
     },
     "日本語": {
         "settings_title": "CoreTrakt - 設定",
@@ -319,7 +352,8 @@ TRANSLATIONS = {
         "tray_desc": "画像ファイル (.ico, .png) を選択するか、デフォルトを維持：",
         "browse": "参照...",
         "reset": "リセット",
-        "language": "インターフェース言語："
+        "language": "インターフェース言語：",
+        "running_in_tray": "CoreTrakt はシステムトレイで引き続き実行されます。"
     },
     "हिन्दी": {
         "settings_title": "CoreTrakt - सेटिंग्स",
@@ -350,7 +384,8 @@ TRANSLATIONS = {
         "tray_desc": "छवि (.ico, .png) चुनें या डिफ़ॉल्ट आइकन रखें:",
         "browse": "ब्राउज़ करें...",
         "reset": "रीसेट करें",
-        "language": "इंटरफ़ेस भाषा:"
+        "language": "इंटरफ़ेस भाषा:",
+        "running_in_tray": "CoreTrakt सिस्टम ट्रे में सक्रिय रहेगा।"
     },
     "العربية": {
         "settings_title": "CoreTrakt - الإعدادات",
@@ -381,7 +416,8 @@ TRANSLATIONS = {
         "tray_desc": "اختر صورة (.ico, .png) أو احتفظ بالأيقونة الافتراضية:",
         "browse": "تصفح...",
         "reset": "إعادة ضبط",
-        "language": "لغة الواجهة:"
+        "language": "لغة الواجهة:",
+        "running_in_tray": "سيبقى CoreTrakt قيد التشغيل في شريط المهام."
     }
 }
 
@@ -393,7 +429,7 @@ def get_resource_path(relative_path: str) -> Path:
 
 
 class VLCConfigManager:
-    DEFAULT_PASS = "CoreTrakt"
+    DEFAULT_PASS = "conetrakt"
 
     @staticmethod
     def get_vlcrc_path() -> Path:
@@ -414,7 +450,7 @@ class VLCConfigManager:
         if not vlcrc.exists():
             try:
                 with open(vlcrc, "w", encoding="utf-8") as f:
-                    f.write("[main]\nextraintf=http\n\n[lua]\nhttp-password=CoreTrakt\n")
+                    f.write("[main]\nextraintf=http\n\n[lua]\nhttp-password=conetrakt\n")
                 return cls.DEFAULT_PASS, True
             except Exception:
                 return cls.DEFAULT_PASS, False
@@ -488,7 +524,7 @@ class VLCConfigManager:
 class ConfigManager:
     DEFAULT_CONFIG = {
         "vlc_host": "http://localhost:8080",
-        "vlc_password": "CoreTrakt",
+        "vlc_password": "conetrakt",
         "folders": [],
         "run_on_startup": False,
         "show_notifications": True,
@@ -535,14 +571,27 @@ class ConfigManager:
 
 
 def set_windows_startup(enable: bool):
+    """Beheert de Windows Run registersleutel en ruimt oude aliassen op."""
     if not winreg:
         return
     key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
-    app_name = "CoreTrakt" 
+    app_name = "CoreTrakt"
+    legacy_names = ["ConeTrakt", "VLC_Trakt_Scrobbler", "vlc_trakt_tray"]
     try:
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_SET_VALUE)
+
+        # Ruim te allen tijde oude restanten op om dubbele starts te voorkomen
+        for old in legacy_names:
+            try:
+                winreg.DeleteValue(key, old)
+            except FileNotFoundError:
+                pass
+
         if enable:
-            cmd = f'"{sys.executable}"' if getattr(sys, "frozen", False) else f'"{sys.executable}" "{Path(__file__).resolve()}"'
+            if getattr(sys, "frozen", False):
+                cmd = f'"{sys.executable}"'
+            else:
+                cmd = f'"{sys.executable}" "{Path(__file__).resolve()}"'
             winreg.SetValueEx(key, app_name, 0, winreg.REG_SZ, cmd)
         else:
             try:
@@ -647,7 +696,7 @@ class TraktClient:
                 pass
 
     def resolve_media_ids(self, media_type: str, title: str, year: int = None):
-        """Vindt de officiële Trakt ID en spelling via de Trakt Search API."""
+        """Vindt het officiële Trakt ID via de Trakt Search API."""
         cache_key = (media_type, title.strip().lower(), year)
         if cache_key in self._search_cache:
             return self._search_cache[cache_key]
@@ -668,11 +717,11 @@ class TraktClient:
                         results = res.json()
 
                 if results and isinstance(results, list):
-                    item = results[0].get(search_type, {})
+                    item_data = results[0].get(search_type, {})
                     resolved = {
-                        "title": item.get("title", title),
-                        "year": item.get("year", year),
-                        "ids": item.get("ids", {}),
+                        "title": item_data.get("title", title),
+                        "year": item_data.get("year", year),
+                        "ids": item_data.get("ids", {}),
                     }
                     print(f"[CoreTrakt] Matched '{title}' -> '{resolved['title']}' (Trakt ID: {resolved['ids'].get('trakt')})")
                     self._search_cache[cache_key] = resolved
@@ -689,7 +738,6 @@ class TraktClient:
             print(f"[CoreTrakt] Scrobble '{action}' skipped: Not authenticated.")
             return False
 
-        # Los de officiële ID's en exacte spelling op
         resolved = self.resolve_media_ids(
             media_info["type"],
             media_info["title"],
@@ -737,13 +785,14 @@ class TraktClient:
 class SettingsGUI:
     _is_open = False
 
-    def __init__(self, config: ConfigManager, trakt: TraktClient, on_save_callback=None):
+    def __init__(self, config: ConfigManager, trakt: TraktClient, tray_app=None, on_save_callback=None):
         if SettingsGUI._is_open:
             return
         SettingsGUI._is_open = True
 
         self.config = config
         self.trakt = trakt
+        self.tray_app = tray_app
         self.on_save_callback = on_save_callback
 
         self.folders = list(self.config.get("folders", []))
@@ -1121,7 +1170,10 @@ class SettingsGUI:
         self.config.set("language", self.combo_lang.get())
 
         if self.on_save_callback:
-            self.on_save_callback()
+            try:
+                self.on_save_callback()
+            except Exception:
+                pass
 
     def _save_only(self):
         self._save_data()
@@ -1130,11 +1182,17 @@ class SettingsGUI:
 
     def _save_and_close(self):
         self._save_data()
+        if self.tray_app and self.config.get("show_notifications", True):
+            self.tray_app.notify("CoreTrakt", self.t["running_in_tray"])
         self._on_close()
 
     def _on_close(self):
         SettingsGUI._is_open = False
-        self.root.destroy()
+        try:
+            self.root.quit()
+            self.root.destroy()
+        except Exception:
+            pass
 
 
 # ==========================================
@@ -1151,7 +1209,7 @@ class VLCScrobblerEngine:
         self.stop_signal = threading.Event()
 
     def _get_vlc_auth_headers(self):
-        p = self.config.get("vlc_password", "CoreTrakt")
+        p = self.config.get("vlc_password", "conetrakt")
         b64 = base64.b64encode(f":{p}".encode()).decode()
         return {"Authorization": f"Basic {b64}"}
 
@@ -1247,7 +1305,6 @@ class VLCScrobblerEngine:
         if not parsed or "title" not in parsed:
             return None
 
-        # Veilige seizoensconversie
         s = parsed.get("season")
         if s is None:
             clean_s = 1
@@ -1259,7 +1316,6 @@ class VLCScrobblerEngine:
             except (ValueError, TypeError):
                 clean_s = 1
 
-        # Veilige afleveringsconversie
         e = parsed.get("episode")
         if e is None:
             clean_e = 1
@@ -1365,6 +1421,9 @@ class TraktTrayApp:
     def __init__(self):
         self.config = ConfigManager(CONFIG_FILE)
 
+        # Ruim bij het starten altijd direct legacy register-sleutels op
+        set_windows_startup(self.config.get("run_on_startup", False))
+
         print("[CoreTrakt] Verifying VLC web interface setup...")
         pwd, ok = VLCConfigManager.get_or_setup_vlc()
         self.config.set("vlc_password", pwd)
@@ -1380,18 +1439,32 @@ class TraktTrayApp:
         self.status_text = text
         if self.icon:
             self.icon.title = f"CoreTrakt: {text}"
-            self.icon.update_menu()
+            try:
+                self.icon.update_menu()
+            except Exception:
+                pass
 
     def notify(self, title: str, message: str):
         if self.icon and self.icon.HAS_NOTIFICATION:
-            self.icon.notify(message, title)
+            try:
+                self.icon.notify(message, title)
+            except Exception:
+                pass
 
     def reload_icon_image(self):
         if self.icon:
-            self.icon.icon = get_application_icon(self.config.get("custom_icon_path", ""))
+            try:
+                self.icon.icon = get_application_icon(self.config.get("custom_icon_path", ""))
+            except Exception:
+                pass
 
     def open_settings(self, icon=None, item=None):
-        threading.Thread(target=lambda: SettingsGUI(self.config, self.trakt, on_save_callback=self.reload_icon_image), daemon=True).start()
+        threading.Thread(
+            target=lambda: SettingsGUI(
+                self.config, self.trakt, tray_app=self, on_save_callback=self.reload_icon_image
+            ),
+            daemon=True
+        ).start()
 
     def on_exit(self, icon, item):
         self.update_status("Stopping...")
@@ -1405,7 +1478,7 @@ class TraktTrayApp:
         print("[CoreTrakt] Starting application engine...")
         if not self.trakt.is_authenticated():
             print("[CoreTrakt] Trakt is not authenticated yet. Launching setup window...")
-            SettingsGUI(self.config, self.trakt)
+            SettingsGUI(self.config, self.trakt, tray_app=self)
 
         self.trakt.refresh_token_if_needed()
 
@@ -1431,4 +1504,5 @@ class TraktTrayApp:
 
 
 if __name__ == "__main__":
+    _instance_mutex = ensure_single_instance()
     TraktTrayApp().run()
