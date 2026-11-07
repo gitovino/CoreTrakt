@@ -43,4 +43,4 @@ git clone [https://github.com/YOUR_GITHUB_USERNAME/ConeTrakt.git](https://github
 cd ConeTrakt
 
 python -m pip install -r requirements.txt
-python vlc_trakt_tray.py
+python vlc_trakt_tray.py"# CoreTrakt" 
