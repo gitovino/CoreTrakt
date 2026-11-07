@@ -25,11 +25,51 @@ else:
     ctypes = None
     winreg = None
 
+Python
 # ==========================================
-#  SINGLE INSTANCE CONTROLE (MUTEX)
+#  SINGLE INSTANCE CONTROLE & SYSTEEMTAAL
 # ==========================================
+ALREADY_RUNNING_MESSAGES = {
+    "Nederlands": "CoreTrakt draait al actief op de achtergrond in het systeemvak (rechtsonder bij de klok).",
+    "English": "CoreTrakt is already running in the background in the system tray (bottom right near the clock).",
+    "Español": "CoreTrakt ya se está ejecutando en segundo plano en la bandeja del sistema (abajo a la derecha, cerca del reloj).",
+    "Français": "CoreTrakt est déjà en cours d'exécution en arrière-plan dans la barre d'état système (en bas à droite près de l'horloge).",
+    "Deutsch": "CoreTrakt läuft bereits im Hintergrund im Infobereich (unten rechts neben der Uhr).",
+    "Português": "O CoreTrakt já está sendo executado em segundo plano na bandeja do sistema (canto inferior direito perto do relógio).",
+    "Русский": "CoreTrakt уже работает в фоновом режиме в системном трее (внизу справа возле часов).",
+    "中文": "CoreTrakt 已在系统托盘后台运行（位于右下角时钟旁）。",
+    "日本語": "CoreTrakt は既にシステムトレイのバックグラウンドで実行されています（時計の横）。",
+    "हिन्दी": "CoreTrakt पहले से ही सिस्टम ट्रे में पृष्ठभूमि में चल रहा है (घड़ी के पास नीचे दाईं ओर)।",
+    "العربية": "يعمل CoreTrakt بالفعل في الخلفية في شريط المهام (أسفل اليمين بجوار الساعة)."
+}
+
+def get_system_ui_language() -> str:
+    """Detecteert de Windows-weergavetaal via de Win32 API."""
+    if sys.platform == "win32" and ctypes:
+        try:
+            # Lees het primaire taal-ID van Windows uit (Primary Language ID)
+            lang_id = ctypes.windll.kernel32.GetUserDefaultUILanguage() & 0x3ff
+            mapping = {
+                0x13: "Nederlands",
+                0x09: "English",
+                0x0a: "Español",
+                0x0c: "Français",
+                0x07: "Deutsch",
+                0x16: "Português",
+                0x19: "Русский",
+                0x04: "中文",
+                0x11: "日本語",
+                0x39: "हिन्दी",
+                0x01: "العربية",
+            }
+            if lang_id in mapping:
+                return mapping[lang_id]
+        except Exception:
+            pass
+    return "English"
+
 def ensure_single_instance():
-    """Zorgt ervoor dat CoreTrakt nooit dubbel geopend kan worden."""
+    """Zorgt ervoor dat CoreTrakt nooit dubbel geopend kan worden en toont pop-up in systeemtaal."""
     if not ctypes:
         return None
     try:
@@ -37,9 +77,24 @@ def ensure_single_instance():
         mutex = ctypes.windll.kernel32.CreateMutexW(None, False, mutex_name)
         error_already_exists = 183
         if ctypes.windll.kernel32.GetLastError() == error_already_exists:
+            # Bepaal taal: controleer eerst config.json, anders de Windows-systeemtaal
+            detected_lang = None
+            if CONFIG_FILE.exists():
+                try:
+                    with open(CONFIG_FILE, "r", encoding="utf-8") as f:
+                        cfg = json.load(f)
+                        detected_lang = cfg.get("language")
+                except Exception:
+                    pass
+
+            if not detected_lang or detected_lang not in ALREADY_RUNNING_MESSAGES:
+                detected_lang = get_system_ui_language()
+
+            msg = ALREADY_RUNNING_MESSAGES.get(detected_lang, ALREADY_RUNNING_MESSAGES["English"])
+
             ctypes.windll.user32.MessageBoxW(
                 0,
-                "CoreTrakt draait al actief op de achtergrond in het systeemvak (rechtsonder bij de klok).",
+                msg,
                 "CoreTrakt",
                 0x40 | 0x10000
             )
